@@ -1,0 +1,10 @@
+AZURE_WHISPER_ENDPOINT=https://poorv-m6mlihsh-swedencentral.cognitiveservices.azure.com/
+AZURE_WHISPER_API_KEY=AyQ5UUf02VnZzlmlazK8qn8EVBTP5M8aXyxs1TNgD5BfupzWiVeJJQQJ99BBACfhMk5XJ3w3AAAAACOGUypE
+WHISPER_API_VERSION=2024-06-01
+PORT=3001
+
+
+# OpenAI settings (GPT-4o)
+AZURE_OPENAI_ENDPOINT=https://poorv-m6mlihsh-swedencentral.cognitiveservices.azure.com/
+AZURE_OPENAI_API_KEY=AyQ5UUf02VnZzlmlazK8qn8EVBTP5M8aXyxs1TNgD5BfupzWiVeJJQQJ99BBACfhMk5XJ3w3AAAAACOGUypE
+OPENAI_API_VERSION=2024-02-15-preview
