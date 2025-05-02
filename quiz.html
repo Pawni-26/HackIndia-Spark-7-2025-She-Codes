@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Game</title>
+  <style>
+    /* General Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00bcd4;
+      margin-bottom: 20px;
+    }
+
+    #quiz-container {
+      width: 90%;
+      max-width: 600px;
+      background-color: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+    }
+
+    .question-container {
+      margin-bottom: 20px;
+    }
+
+    .option {
+      cursor: pointer;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #00bcd4;
+      border-radius: 5px;
+      background-color: #2e2e2e;
+      color: #ffffff;
+      transition: background-color 0.3s ease;
+    }
+
+    .option:hover {
+      background-color: #008c9e;
+    }
+
+    .selected {
+      background-color: #e0f7fa;
+      color: #000000;
+    }
+
+    .correct {
+      background-color: #4caf50;
+      color: #ffffff;
+    }
+
+    .incorrect {
+      background-color: #f44336;
+      color: #ffffff;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background-color: #00bcd4;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px;
+    }
+
+    .btn:hover {
+      background-color: #008c9e;
+    }
+
+    .btn:disabled {
+      background-color: #555555;
+      cursor: not-allowed;
+    }
+
+    .result {
+      font-size: 1.2em;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      #quiz-container {
+        width: 95%;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Quiz Game</h1>
+  <div id="quiz-container"></div>
+  <div style="text-align: center;">
+    <button class="btn" id="nextBtn" disabled>Next</button>
+    <button class="btn" id="finishBtn" style="display: none;">Finish</button>
+  </div>
+  <div id="result" class="result"></div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const quizData = JSON.parse(sessionStorage.getItem('quiz'));
+      let currentQuestionIndex = 0;
+      let score = 0;
+
+      // Define global selectOption function
+      window.selectOption = function (selectedOption, optionElement) {
+        const question = quizData[currentQuestionIndex];
+        const options = document.querySelectorAll('.option');
+
+        // Disable all options after selection
+        options.forEach((option) => (option.style.pointerEvents = 'none'));
+
+        // Highlight selected
+        optionElement.classList.add('selected');
+        const correctAnswer = question.correct;
+
+        if (selectedOption === correctAnswer) {
+          optionElement.classList.add('correct');
+          score++;
+        } else {
+          optionElement.classList.add('incorrect');
+          // Also show correct one
+          options.forEach((option) => {
+            if (option.textContent === question[`option${correctAnswer}`]) {
+              option.classList.add('correct');
+            }
+          });
+        }
+
+        document.getElementById('nextBtn').disabled = false;
+      };
+
+      function displayQuestion() {
+        const question = quizData[currentQuestionIndex];
+        const quizContainer = document.getElementById('quiz-container');
+        document.getElementById('nextBtn').disabled = true;
+
+        quizContainer.innerHTML = `
+          <div class="question-container">
+            <h3>${currentQuestionIndex + 1}. ${question.question}</h3>
+            <ul style="list-style: none; padding: 0;">
+              <li class="option" onclick="selectOption('A', this)">${question.optionA}</li>
+              <li class="option" onclick="selectOption('B', this)">${question.optionB}</li>
+              <li class="option" onclick="selectOption('C', this)">${question.optionC}</li>
+            </ul>
+          </div>
+        `;
+      }
+
+      document.getElementById('nextBtn').addEventListener('click', () => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+          displayQuestion();
+        } else {
+          document.getElementById('nextBtn').style.display = 'none';
+          document.getElementById('finishBtn').style.display = 'inline-block';
+        }
+      });
+
+      document.getElementById('finishBtn').addEventListener('click', () => {
+        document.getElementById(
+          'result'
+        ).textContent = `Your score is: ${score} out of ${quizData.length}`;
+        document.getElementById('quiz-container').style.display = 'none';
+        document.getElementById('finishBtn').style.display = 'none';
+      });
+
+      displayQuestion();
+    });
+  </script>
+</body>
+</html>
