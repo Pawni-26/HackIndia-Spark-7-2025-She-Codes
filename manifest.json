@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Call-it-Done",
+  "version": "1.0",
+  "description": "Record and transcribe calls",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
